@@ -27,8 +27,8 @@ if(cert_file) {
   }
 }
 
-var etcdHost = process.env.ETCD_HOST || '172.17.42.1';
-var etcdPort = process.env.ETCD_PORT || 4001;
+var etcdHost = process.env.ETCD_HOST || '127.0.0.1';
+var etcdPort = process.env.ETCD_PORT || 3000;
 var serverPort = process.env.SERVER_PORT || 8000;
 var publicDir = 'frontend';
 var authUser = process.env.AUTH_USER;
@@ -71,7 +71,7 @@ http.createServer(function serverFile(req, res) {
     // serve static file if exists
     res.writeHead(200, mimeTypes[path.extname(filename).split(".")[1]]);
     fs.createReadStream(filename).pipe(res);
-  });
+});
 }).listen(serverPort, function() {
   console.log('proxy /api requests to etcd on ' + etcdHost + ':' + etcdPort);
   console.log('etc-browser listening on port ' + serverPort);
