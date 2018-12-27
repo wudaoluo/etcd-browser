@@ -30,12 +30,12 @@ func ListContext(ctx context.Context, key string) ([]*Node, error) {
 	return EtcdClient.ListContext(ctx, key)
 }
 
-func Put(key, value string, mustEmpty bool) error {
-	return EtcdClient.Put(key, value, mustEmpty)
+func Put(key, value string) error {
+	return EtcdClient.Put(key, value)
 }
 
-func PutContext(ctx context.Context, key, value string, mustEmpty bool) error {
-	return EtcdClient.PutContext(ctx, key, value, mustEmpty)
+func PutContext(ctx context.Context, key, value string) error {
+	return EtcdClient.PutContext(ctx, key, value)
 }
 
 func Create(key, value string) error {

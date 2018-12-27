@@ -5,12 +5,12 @@ import (
 	"github.com/coreos/etcd/clientv3"
 )
 
-func (c *client) Put(key, value string, mustEmpty bool) error {
-	return c.put(context.Background(), key, value, mustEmpty)
+func (c *client) Put(key, value string) error {
+	return c.put(context.Background(), key, value, false)
 }
 
-func (c *client) PutContext(ctx context.Context, key, value string, mustEmpty bool) error {
-	return c.put(ctx, key, value, mustEmpty)
+func (c *client) PutContext(ctx context.Context, key, value string) error {
+	return c.put(ctx, key, value, false)
 }
 
 func (c *client) put(ctx context.Context, key, value string, mustEmpty bool) error {

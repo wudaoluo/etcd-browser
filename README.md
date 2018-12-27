@@ -1,33 +1,26 @@
+### webUI是etcd-browser
+https://github.com/henszey/etcd-browser.git
+#### api接口参考e3w
+https://github.com/soyking/e3w.git
+### etcd kv操作参考e3ch
+https://github.com/soyking/e3ch.git
 
-# etcd browser
+##### 最大亮点 同时支持etcdv2 v3版本 更多功能正在路上！！！
 
-## Demo
-[http://henszey.github.io/etcd-browser/](http://henszey.github.io/etcd-browser/)
+### version 0.1
+    - 支持 etcd v2
+    - 支持 etcd v3
+    - 使用 go 代替了node
+    - 支持添加多个etcd地址
+
+
+
+### 安装
+    etcd v3 默认支持 开箱即用
+
+    etcd v2 执行下面语句在linux中
+    sed -i "s/v3/v2/g" etcdbrowser.js
+    或者手动修改etcdbrowser.js ,5,6行 v3 改成v2
 
 ## Screen Shot
 ![etcd-browser Screen Shot](http://henszey.github.io/etcd-browser/images/etcdbrowser.png)
-
-## TODO
-* Implement missing features (TTL)
-
-## To build/run as a Docker container:
-
-(adjust options as necessary - to run it as a daemon, remove "--rm", "-t", "-i" and add "-D")
-
-    cd <repository>
-    sudo docker build -t etcd-browser .
-    sudo docker run --rm --name etcd-browser -p 0.0.0.0:8000:8000 --env ETCD_HOST=10.10.0.1 --env AUTH_PASS=doe -t -i etcd-browser
-
-### Configuration
-You can configure the builtin server using environment variables:
-
- * AUTH_USER: Username for http basic auth (skip to disable auth)
- * AUTH_PASS: Password for http basic auth
- * ETCD_HOST: IP of the etcd host the internal proxy should use [172.17.42.1]
- * ETCD_PORT: Port of the etcd daemon [4001]
- * SERVER_PORT: Port of builtin server
- 
-If you use a secured etcd:
- * ETCDCTL_CA_FILE
- * ETCDCTL_KEY_FILE
- * ETCDCTL_CERT_FILE

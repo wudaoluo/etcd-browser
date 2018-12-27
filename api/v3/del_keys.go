@@ -8,18 +8,11 @@ import (
 
 func DelKeys(c *gin.Context) {
 	key := c.Param("action")
-	_, isDir := c.GetQuery("dir")
-
-	etcdlib.Delete(key)
-
-	prevNodes := &Node{Key:key}
-	realNodes := &Node{
-		Key:key,
+	err := etcdlib.Delete(key)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+		return
 	}
-	if isDir {
-		realNodes.IsDir = isDir
-		prevNodes.IsDir = isDir
-		//删除目录
-	}
-	c.JSON(http.StatusOK,gin.H{"action":"delete","node":realNodes,"prevNode":prevNodes})
+
+	c.JSON(http.StatusOK, nil)
 }

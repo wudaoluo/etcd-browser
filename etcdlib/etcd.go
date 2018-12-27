@@ -28,8 +28,8 @@ type Clienter interface {
 	List(key string) ([]*Node, error)
 	ListContext(ctx context.Context, key string) ([]*Node, error)
 
-	Put(key, value string, mustEmpty bool) error
-	PutContext(ctx context.Context, key, value string, mustEmpty bool) error
+	Put(key, value string) error
+	PutContext(ctx context.Context, key, value string) error
 
 	Create(key, value string) error
 	CreateContext(ctx context.Context, key, value string) error

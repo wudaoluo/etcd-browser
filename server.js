@@ -28,7 +28,7 @@ if(cert_file) {
 }
 
 var etcdHost = process.env.ETCD_HOST || '127.0.0.1';
-var etcdPort = process.env.ETCD_PORT || 3000;
+var etcdPort = process.env.ETCD_PORT || 12379;
 var serverPort = process.env.SERVER_PORT || 8000;
 var publicDir = 'frontend';
 var authUser = process.env.AUTH_USER;
@@ -56,7 +56,7 @@ http.createServer(function serverFile(req, res) {
   }
 
   if(req.url === '/'){
-    req.url = '/index.html';
+    req.url = '/a.html';
   } else if(req.url.substr(0, 3) === '/v2') {
     // avoid fileExists for /v2 routes
     return proxy(req, res);

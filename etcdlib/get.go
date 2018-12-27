@@ -18,7 +18,7 @@ func (c *client) GetContext(ctx context.Context, key string) (*Node, error) {
 	}
 
 	if len(resp.Kvs) == 0 {
-		return nil, ErrorInvalidKey
+		return nil, ErrorKeyNotFound
 	}
 
 	//TODO  为什么要用这个

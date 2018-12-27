@@ -2,7 +2,6 @@ package etcdlib
 
 import (
 	"context"
-	"fmt"
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"strings"
@@ -32,7 +31,6 @@ func (c *client) ListContext(ctx context.Context, key string) ([]*Node, error) {
 		return nil, err
 	}
 
-
 	if !txnResp.Succeeded {
 		return nil, ErrorListKey
 	} else {
@@ -50,7 +48,6 @@ func (c *client) ListContext(ctx context.Context, key string) ([]*Node, error) {
 func (c *client) list(dir string, kvs []*mvccpb.KeyValue) ([]*Node, error) {
 	nodes := []*Node{}
 	for _, kv := range kvs {
-		fmt.Println(string(kv.Key), dir)
 		name := strings.TrimPrefix(string(kv.Key), dir)
 		if strings.Contains(name, "/") {
 			// secondary directory

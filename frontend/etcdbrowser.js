@@ -2,8 +2,8 @@
 var app = angular.module("app", ["xeditable","ngCookies"]);
 
 app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$cookies) {
-  var keyPrefix = '/v2/keys',
-      statsPrefix = '/v2/stats';
+  var keyPrefix = '/v3/keys',
+      statsPrefix = '/v3/stats';
 
   if($cookies.urlPrefix){
     $scope.urlPrefix = $cookies.urlPrefix;
@@ -61,7 +61,6 @@ app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$
     }
   }
   $scope.submit = function(){
-    console.log($cookies);
     $cookies.urlPrefix = $scope.getPrefix();
     $scope.root = {key:'/'};
     delete $scope.activeNode;
@@ -72,7 +71,7 @@ app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$
     var value = prompt("Enter Property value", "");
     if(!name || name == "") return;
 
-    $http({method: 'PUT',
+    $http({method: 'POST',
     	   url: $scope.getPrefix() + keyPrefix + node.key + (node.key != "/" ? "/" : "") + name,
     	   params: {"value": value}}).
     success(function(data) {
@@ -112,7 +111,7 @@ app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$
   $scope.createDir = function(node){
     var dirName = prompt("Enter Directory Name", "");
     if(!dirName || dirName == "") return;
-    $http({method: 'PUT',
+    $http({method: 'POST',
       url: $scope.getPrefix() + keyPrefix + node.key + (node.key != "/" ? "/" : "") + dirName,
       params: {"dir": true}}).
     success(function(data) {
@@ -131,7 +130,7 @@ app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$
             $scope.copyDirAux(node.nodes[key], tarjet + node.nodes[key].name + "/")
           } else {
             var url = $scope.getPrefix() + keyPrefix + tarjet + node.nodes[key].name
-            $http({method: 'PUT',
+            $http({method: 'POST',
               url: url,
               params: {"value": node.nodes[key].value}}).
             error(errorHandler);
