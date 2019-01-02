@@ -1,25 +1,35 @@
 package serverRoom
 
 import (
-	"fmt"
 	"github.com/ThreeKing2018/goutil/config"
-	"time"
+	"sync"
 )
 
 //配置文件操作
 
-func init() {
-	conf := config.New()
-	conf.SetConfig("config.json", "json", "/etc", "/home", ".")
-	err := conf.ReadConfig()
+type singleton config.Viperable
+
+
+var v singleton
+var once sync.Once
+
+
+func GetConfigInstance() singleton {
+	once.Do(load)
+	return v
+}
+
+//配置文件初始化
+func load() {
+	v = config.New()
+	v.SetConfig(Arg.configfile, "json", "/etc", "/home", ".")
+
+	err := v.ReadConfig()
 	if err != nil {
 		panic(err)
 	}
-	conf.WatchConfig()
-	go func() {
-		for {
-			fmt.Println(conf.GetString("debug"))
-			time.Sleep(1 * time.Second)
-		}
-	}()
+	v.WatchConfig()
+
+
+
 }

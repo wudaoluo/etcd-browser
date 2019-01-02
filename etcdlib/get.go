@@ -21,6 +21,5 @@ func (c *client) GetContext(ctx context.Context, key string) (*Node, error) {
 		return nil, ErrorKeyNotFound
 	}
 
-	//TODO  为什么要用这个
 	return c.createNode(resp.Kvs[0]), nil
 }

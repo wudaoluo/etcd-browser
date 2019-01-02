@@ -90,6 +90,7 @@ func (c *client) trimRootKey(key string) string {
 	return strings.TrimPrefix(key, c.prefix)
 }
 
+
 func (c *client) Close() {
 	c.Close()
 }

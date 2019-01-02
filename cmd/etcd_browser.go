@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	_ "github.com/wudaoluo/etcd-browser"
+	e "github.com/wudaoluo/etcd-browser"
 	apiv2 "github.com/wudaoluo/etcd-browser/api/v2"
 	apiv3 "github.com/wudaoluo/etcd-browser/api/v3"
 	"net/http"
@@ -32,6 +32,7 @@ func main() {
 	v3.DELETE("/keys/*action", apiv3.DelKeys)
 	v3.PUT("/keys/*action", apiv3.PutKeys)
 
-	router.Run(":3001")
+	cnf:= e.GetConfigInstance()
+	router.Run(cnf.GetString("listen"))
 
 }

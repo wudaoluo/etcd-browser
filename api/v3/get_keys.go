@@ -21,9 +21,7 @@ func parseNode(node *etcdlib.Node) *Node {
 	}
 }
 
-func init() {
-	etcdlib.SetEtcd([]string{TEST_ETCD_ADDR}, TEST_ROOT_KEY)
-}
+
 
 func Keys(c *gin.Context) {
 
