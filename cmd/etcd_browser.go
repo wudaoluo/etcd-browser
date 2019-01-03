@@ -1,11 +1,13 @@
 package main
 
 import (
+	"github.com/ThreeKing2018/goutil/golog"
 	"github.com/gin-gonic/gin"
 	e "github.com/wudaoluo/etcd-browser"
 	apiv2 "github.com/wudaoluo/etcd-browser/api/v2"
 	apiv3 "github.com/wudaoluo/etcd-browser/api/v3"
 	"net/http"
+	"time"
 )
 
 func main() {
@@ -32,7 +34,21 @@ func main() {
 	v3.DELETE("/keys/*action", apiv3.DelKeys)
 	v3.PUT("/keys/*action", apiv3.PutKeys)
 
+
 	cnf:= e.GetConfigInstance()
-	router.Run(cnf.GetString("listen"))
+
+	httpServer := &http.Server{
+		Addr:           cnf.GetString("listen"),
+		Handler:        router,
+		ReadTimeout:    3 * time.Second,
+		WriteTimeout:   3 * time.Second,
+		IdleTimeout:    30 * time.Second,
+	}
+
+	err := httpServer.ListenAndServe()
+	if err != nil {
+		golog.Fatal("start http fail:", err.Error())
+	}
+
 
 }

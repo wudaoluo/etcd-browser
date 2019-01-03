@@ -1,6 +1,8 @@
 package etcdlib
 
-import "context"
+import (
+	"context"
+)
 
 func (c *client) Get(key string) (*Node, error) {
 	return c.GetContext(context.Background(), key)

@@ -27,12 +27,17 @@ func Keys(c *gin.Context) {
 
 	key := c.Param("action")
 
-	node, _ := etcdlib.Get(key)
+	node, err := etcdlib.Get(key)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"err": err})
+		return
+	}
 	if node.IsDir {
 
 		nodes, err := etcdlib.List(key)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"err": err})
+			return
 		}
 
 		realNodes := &Node{

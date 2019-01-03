@@ -12,7 +12,7 @@ https://github.com/soyking/e3ch.git
     - 支持 etcd v3
     - 使用 go 代替了node
     - 支持添加多个etcd地址
-
+    - 支持 配置文件动态更新
 
 
 ### 安装

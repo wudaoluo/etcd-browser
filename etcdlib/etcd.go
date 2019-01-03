@@ -60,12 +60,20 @@ func New(endpoint []string, Prefix string) (Clienter, error) {
 		return nil, err
 	}
 
-	return &client{
+
+	ctl := &client{
 		keysAPI:  c,
 		prefix:   Prefix,
 		dirValue: DEFAULT_DIR_VALUE,
 		timeout:  3 * time.Second,
-	}, nil
+	}
+
+
+	err = ctl.FormatRootKey()  //prefix key 如果不存在就创建它
+	if err != nil {
+		panic(err)
+	}
+	return ctl,nil
 }
 
 type Node struct {
@@ -93,4 +101,9 @@ func (c *client) trimRootKey(key string) string {
 
 func (c *client) Close() {
 	c.Close()
+}
+
+func (c *client) FormatRootKey() error {
+	_,err:=c.keysAPI.Put(context.Background(),c.prefix, c.dirValue)
+	return err
 }
