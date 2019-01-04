@@ -2,9 +2,13 @@
     "listen": ":3000",
     "debug": true,
     "etcd_root_key": "root",
-    "etcd_addr": ["127.0.0.1:32771","127.0.0.1:32772","127.0.0.1:32773"],
+    "etcd_addr": ["127.0.0.1:32774","127.0.0.1:32775","127.0.0.1:32776"],
     "etcd_version": "v3",
     "service_name": "etcd_browser",
     "log_dir": "./log",
-    "log_type_json": true
+    "log_type_json": true,
+    "caKey": "",
+    "cert_file": "../tlskey/etcd.pem",
+    "key_file": "../tlskey/etcd-key.pem",
+    "ca_file": "../tlskey/ca.pem"
 }

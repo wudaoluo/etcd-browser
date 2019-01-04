@@ -13,6 +13,7 @@ https://github.com/soyking/e3ch.git
     - 使用 go 代替了node
     - 支持添加多个etcd地址
     - 支持 配置文件动态更新
+    - 支持 etcd tls 加密
 
 
 ### 安装
@@ -21,6 +22,9 @@ https://github.com/soyking/e3ch.git
     etcd v2 执行下面语句在linux中
     sed -i "s/v3/v2/g" etcdbrowser.js
     或者手动修改etcdbrowser.js ,5,6行 v3 改成v2
+
+### 生产tls证书
+> https://www.cnblogs.com/Tempted/p/7737361.html
 
 ## Screen Shot
 ![etcd-browser Screen Shot](http://henszey.github.io/etcd-browser/images/etcdbrowser.png)

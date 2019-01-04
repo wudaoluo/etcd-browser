@@ -2,8 +2,10 @@ package etcdlib
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"go.etcd.io/etcd/clientv3"
+	"go.etcd.io/etcd/pkg/transport"
 	"go.etcd.io/etcd/mvcc/mvccpb"
 	"strings"
 	"time"
@@ -49,9 +51,26 @@ type client struct {
 }
 
 func New(endpoint []string, Prefix string) (Clienter, error) {
+	var tlsConfig *tls.Config
+	var err error
+
+
+	tlsInfo := transport.TLSInfo{
+		CertFile:      "../tlskey/etcd.pem",
+		KeyFile:       "../tlskey/etcd-key.pem",
+		TrustedCAFile: "../tlskey/ca.pem",
+	}
+	tlsConfig, err = tlsInfo.ClientConfig()
+	if err != nil {
+		return nil, err
+	}
+
+
+
 	cfg := clientv3.Config{
 		Endpoints:   endpoint,
 		DialTimeout: time.Second * 1,
+		TLS:tlsConfig,
 	}
 
 	c, err := clientv3.New(cfg)
