@@ -18,7 +18,6 @@ func (c *client) GetContext(ctx context.Context, key string) (*Node, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	if len(resp.Kvs) == 0 {
 		return nil, ErrorKeyNotFound
 	}

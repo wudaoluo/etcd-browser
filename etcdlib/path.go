@@ -11,9 +11,6 @@ func isRoot(key string) bool {
 	return key == "/"
 }
 
-func checkRootKey(rootKey string) bool {
-	return rootKey != "" && !strings.HasSuffix(rootKey, "/")
-}
 
 // ensure key, return (realKey, parentKey)
 func (c *client) ensureKey(key string) (string, string, error) {

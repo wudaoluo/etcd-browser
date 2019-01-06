@@ -2,13 +2,14 @@ package etcdlib
 
 import (
 	"context"
+	"crypto/tls"
 )
 
 var EtcdClient Clienter
 
-func SetEtcd(endpoint []string, Prefix string) {
+func SetEtcd(endpoint []string, Prefix string,tls *tls.Config) {
 	var err error
-	EtcdClient, err = New(endpoint, Prefix)
+	EtcdClient, err = New(endpoint, Prefix,tls)
 	if err != nil {
 		panic(err)
 	}

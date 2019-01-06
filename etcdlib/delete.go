@@ -19,7 +19,6 @@ func (c *client) DeleteContext(ctx context.Context, key string) error {
 
 	txn := c.keysAPI.Txn(ctx)
 
-	//TODO 为啥这么写
 	txn.If(
 		clientv3.Compare(clientv3.Value(key), "=", c.dirValue),
 	).Then(

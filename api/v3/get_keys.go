@@ -29,14 +29,14 @@ func Keys(c *gin.Context) {
 
 	node, err := etcdlib.Get(key)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"err": err})
+		c.JSON(http.StatusNotFound, gin.H{"err": err.Error()})
 		return
 	}
 	if node.IsDir {
 
 		nodes, err := etcdlib.List(key)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"err": err})
+			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
 			return
 		}
 

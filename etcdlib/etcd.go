@@ -4,10 +4,8 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	e "github.com/wudaoluo/etcd-browser"
 	"go.etcd.io/etcd/clientv3"
 	"go.etcd.io/etcd/mvcc/mvccpb"
-	"go.etcd.io/etcd/pkg/transport"
 	"strings"
 	"time"
 )
@@ -51,30 +49,12 @@ type client struct {
 	timeout  time.Duration
 }
 
-func New(endpoint []string, Prefix string) (Clienter, error) {
-	var tlsConfig *tls.Config
+func New(endpoint []string, Prefix string,tls *tls.Config) (Clienter, error) {
 	var err error
-
-	cnf := e.GetConfigInstance()
-	if cnf.GetString("cert_file") != "" &&
-		cnf.GetString("key_file") != "" &&
-		cnf.GetString("ca_file") != "" {
-
-		tlsInfo := transport.TLSInfo{
-			CertFile:      cnf.GetString("cert_file"),
-			KeyFile:       cnf.GetString("key_file"),
-			TrustedCAFile: cnf.GetString("ca_file"),
-		}
-		tlsConfig, err = tlsInfo.ClientConfig()
-		if err != nil {
-			return nil, err
-		}
-
-	}
 
 	cfg := clientv3.Config{
 		Endpoints:   endpoint,
-		TLS:         tlsConfig,
+		TLS:         tls,
 		DialTimeout: time.Second * 3,
 	}
 
