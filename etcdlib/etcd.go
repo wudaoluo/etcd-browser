@@ -4,9 +4,10 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	e "github.com/wudaoluo/etcd-browser"
 	"go.etcd.io/etcd/clientv3"
-	"go.etcd.io/etcd/pkg/transport"
 	"go.etcd.io/etcd/mvcc/mvccpb"
+	"go.etcd.io/etcd/pkg/transport"
 	"strings"
 	"time"
 )
@@ -54,23 +55,27 @@ func New(endpoint []string, Prefix string) (Clienter, error) {
 	var tlsConfig *tls.Config
 	var err error
 
+	cnf := e.GetConfigInstance()
+	if cnf.GetString("cert_file") != "" &&
+		cnf.GetString("key_file") != "" &&
+		cnf.GetString("ca_file") != "" {
 
-	tlsInfo := transport.TLSInfo{
-		CertFile:      "../tlskey/etcd.pem",
-		KeyFile:       "../tlskey/etcd-key.pem",
-		TrustedCAFile: "../tlskey/ca.pem",
+		tlsInfo := transport.TLSInfo{
+			CertFile:      cnf.GetString("cert_file"),
+			KeyFile:       cnf.GetString("key_file"),
+			TrustedCAFile: cnf.GetString("ca_file"),
+		}
+		tlsConfig, err = tlsInfo.ClientConfig()
+		if err != nil {
+			return nil, err
+		}
+
 	}
-	tlsConfig, err = tlsInfo.ClientConfig()
-	if err != nil {
-		return nil, err
-	}
-
-
 
 	cfg := clientv3.Config{
 		Endpoints:   endpoint,
-		DialTimeout: time.Second * 1,
-		TLS:tlsConfig,
+		TLS:         tlsConfig,
+		DialTimeout: time.Second * 3,
 	}
 
 	c, err := clientv3.New(cfg)
@@ -79,20 +84,18 @@ func New(endpoint []string, Prefix string) (Clienter, error) {
 		return nil, err
 	}
 
-
 	ctl := &client{
 		keysAPI:  c,
 		prefix:   Prefix,
 		dirValue: DEFAULT_DIR_VALUE,
-		timeout:  3 * time.Second,
+		timeout:  1 * time.Second,
 	}
 
-
-	err = ctl.FormatRootKey()  //prefix key 如果不存在就创建它
+	err = ctl.FormatRootKey() //prefix key 如果不存在就创建它
 	if err != nil {
 		panic(err)
 	}
-	return ctl,nil
+	return ctl, nil
 }
 
 type Node struct {
@@ -117,12 +120,13 @@ func (c *client) trimRootKey(key string) string {
 	return strings.TrimPrefix(key, c.prefix)
 }
 
-
 func (c *client) Close() {
 	c.Close()
 }
 
 func (c *client) FormatRootKey() error {
-	_,err:=c.keysAPI.Put(context.Background(),c.prefix, c.dirValue)
+	ctx, cancel := context.WithTimeout(context.TODO(), c.timeout)
+	defer cancel()
+	_, err := c.keysAPI.Put(ctx, c.prefix, c.dirValue)
 	return err
 }
