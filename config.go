@@ -2,6 +2,7 @@ package serverRoom
 
 import (
 	"github.com/ThreeKing2018/goutil/config"
+	"strings"
 	"sync"
 )
 
@@ -22,7 +23,12 @@ func GetConfigInstance() singleton {
 //配置文件初始化
 func load() {
 	v = config.New()
-	v.SetConfig(Arg.configfile, "json", "/etc", "/home", ".")
+	var cnfType = "json"
+	a := strings.Split(Arg.configfile,".")
+	if len(a) == 2 {
+		cnfType = a[1]
+	}
+	v.SetConfig(Arg.configfile, cnfType, "/etc", "/home", ".")
 
 	err := v.ReadConfig()
 	if err != nil {

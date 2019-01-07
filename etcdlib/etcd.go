@@ -40,6 +40,8 @@ type Clienter interface {
 
 	Delete(key string) error
 	DeleteContext(ctx context.Context, key string) error
+
+	MembersHandler() (interface{}, error)
 }
 
 type client struct {

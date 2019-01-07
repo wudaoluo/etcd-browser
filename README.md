@@ -13,15 +13,17 @@ https://github.com/soyking/e3ch.git
     - 使用 go 代替了node
     - 支持添加多个etcd地址
     - 支持 配置文件动态更新
-    - 支持 etcd tls 加密
+    - 支持 etcdv3 tls 加密
+    - 支持 json toml 配置文件 
+
+### version 0.2
+    - 即将支持后悔药功能
 
 
 ### 安装
     etcd v3 默认支持 开箱即用
-
-    etcd v2 执行下面语句在linux中
-    sed -i "s/v3/v2/g" etcdbrowser.js
-    或者手动修改etcdbrowser.js ,5,6行 v3 改成v2
+    etcd v2 手动修改etcdbrowser.js ,5,6行 v3 改成v2
+    配置文件修改成 etcd_version值改成 "v2"
 
 ### 生产tls证书
 > https://www.cnblogs.com/Tempted/p/7737361.html

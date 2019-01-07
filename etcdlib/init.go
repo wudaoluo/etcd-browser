@@ -62,3 +62,7 @@ func Delete(key string) error {
 func DeleteContext(ctx context.Context, key string) error {
 	return EtcdClient.DeleteContext(ctx, key)
 }
+
+func MembersHandler() (interface{}, error) {
+	return EtcdClient.MembersHandler()
+}

@@ -6,15 +6,19 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	e "github.com/wudaoluo/etcd-browser"
 )
 
 func ReverseProxy(ctx *gin.Context) {
-	var targets = []*url.URL{
-		{
+	cnf:= e.GetConfigInstance()
+	var targets = []*url.URL{}
+	for _, etcd_addr := range cnf.GetStringSlice("etcd_addr") {
+		targets = append(targets,&url.URL{
 			Scheme: "http",
-			Host:   "127.0.0.1:12379",
-		},
+			Host:   etcd_addr,
+		})
 	}
+
 
 	director := func(req *http.Request) {
 		target := targets[rand.Int()%len(targets)]

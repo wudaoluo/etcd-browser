@@ -23,6 +23,7 @@ func init() {
 	//flag.BoolVar(&Arg.debug,"debug",true,"open debug default false")
 	flag.StringVar(&Arg.configfile,"c",DEFAULT_CONFIG_NAME,"specify config file")
 	//flag.StringVar(&Arg.logdir,"logdir",internal.LOG_DIR,"log dir")
+	flag.Parse()
 }
 
 

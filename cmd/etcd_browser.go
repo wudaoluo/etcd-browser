@@ -34,6 +34,9 @@ func main() {
 	v3.DELETE("/keys/*action", apiv3.DelKeys)
 	v3.PUT("/keys/*action", apiv3.PutKeys)
 
+	//v3.GET("/stats/store",apiv3.Leader)
+	//v3.GET("/stats/leader",apiv3.Leader)
+	v3.GET("/stats/self",apiv3.Leader)
 
 	cnf:= e.GetConfigInstance()
 

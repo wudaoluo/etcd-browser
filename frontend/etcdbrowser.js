@@ -2,8 +2,9 @@
 var app = angular.module("app", ["xeditable","ngCookies"]);
 
 app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$cookies) {
-  var keyPrefix = '/v3/keys',
-      statsPrefix = '/v3/stats';
+  var keyPrefix = '/v2/keys',
+      statsPrefix = '/v2/stats';
+
 
   if($cookies.urlPrefix){
     $scope.urlPrefix = $cookies.urlPrefix;
@@ -176,20 +177,19 @@ app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$
   }
 
   $scope.loadStats = function(){
-    console.log("LOAD STATS");
     $scope.stats = {};
-    $http({method: 'GET', url: $scope.getPrefix() + statsPrefix + "/store"}).
-    success(function(data) {
-      $scope.stats.store = JSON.stringify(data, null, " ");
-    }).
-    error(errorHandler);
-    delete $scope.storeStats;
-    $http({method: 'GET', url: $scope.getPrefix() + statsPrefix + "/leader"}).
-    success(function(data) {
-      $scope.stats.leader = JSON.stringify(data, null, " ");
-    }).
-    error(errorHandler);
-    delete $scope.storeStats;
+    $scope.stats.Prefix = false
+    if (statsPrefix != '/v3/stats'){
+      $scope.stats.Prefix = true
+      $http({method: 'GET', url: $scope.getPrefix() + statsPrefix + "/store"}).success(function (data) {
+        $scope.stats.store = JSON.stringify(data, null, " ");
+      }).error(errorHandler);
+      delete $scope.storeStats;
+      $http({method: 'GET', url: $scope.getPrefix() + statsPrefix + "/leader"}).success(function (data) {
+        $scope.stats.leader = JSON.stringify(data, null, " ");
+      }).error(errorHandler);
+      delete $scope.storeStats;
+  }
     $http({method: 'GET', url: $scope.getPrefix() + statsPrefix + "/self"}).
     success(function(data) {
       $scope.stats.self = JSON.stringify(data, null, " ");

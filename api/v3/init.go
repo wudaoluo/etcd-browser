@@ -7,10 +7,13 @@ import (
 	"go.etcd.io/etcd/pkg/transport"
 )
 
+const ETCD_V2 = "v2"
 
 func init() {
 	cnf:= e.GetConfigInstance()
-
+	if  cnf.GetString("etcd_version") == ETCD_V2 {
+		return
+	}
 	var tls *tls.Config
 
 	if cnf.GetString("cert_file") != "" &&
