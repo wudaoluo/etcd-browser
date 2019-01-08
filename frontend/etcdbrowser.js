@@ -2,9 +2,8 @@
 var app = angular.module("app", ["xeditable","ngCookies"]);
 
 app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$cookies) {
-  var keyPrefix = '/v2/keys',
-      statsPrefix = '/v2/stats';
-
+  var keyPrefix = '/v3/keys',
+      statsPrefix = '/v3/stats';
 
   if($cookies.urlPrefix){
     $scope.urlPrefix = $cookies.urlPrefix;

@@ -1,11 +1,8 @@
 listen = ":3000"
 debug = true
 etcd_root_key = "root"
-etcd_addr = ["127.0.0.1:12379"]
-etcd_version =  "v2"
+etcd_addr = ["127.0.0.1:2379"]
+etcd_version =  "v3"
 service_name = "etcd_browser"
 log_dir = "./log"
 log_type_json =  true
-cert_file= "../tlskey/etcd.pem"
-key_file= "../tlskey/etcd-key.pem"
-ca_file= "../tlskey/ca.pem"
