@@ -27,6 +27,7 @@ func Init() {
 		logType = conf.LogJsontype
 	}
 
+
 	logLevel := conf.WarnLevel
 	if cnf.GetBool("debug") {
 		logLevel = conf.DebugLevel

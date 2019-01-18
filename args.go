@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	VERSION = "0.1"
+	VERSION = "0.2"
 	DEFAULT_CONFIG_NAME = "config.json"
 )
 

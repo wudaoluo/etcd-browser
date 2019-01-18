@@ -19,7 +19,10 @@ https://github.com/soyking/e3ch.git
 ### version 0.2
     - 即将支持后悔药功能
 
-
+### version 0.3
+    - 支持认证
+        - etcd  认证
+        - 登录  认证
 ### 安装
     etcd v3 默认支持 开箱即用
     etcd v2 手动修改etcdbrowser.js ,5,6行 v3 改成v2
