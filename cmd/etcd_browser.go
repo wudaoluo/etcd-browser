@@ -16,7 +16,11 @@ import (
 )
 
 func main() {
-	model.Init()
+	ctx,cancel := context.WithCancel(context.Background())
+
+	model.DBInit(ctx)
+	apiv3.Init(ctx)
+
 
 	router := gin.Default()
 
@@ -62,13 +66,12 @@ func main() {
 			// Error from closing listeners, or context timeout:
 			golog.Error("HTTP server Shutdown: %v", err)
 		}
+		cancel()
 	}()
 
 
 	err := httpServer.ListenAndServe()
 	if err != nil {
-		golog.Fatal("start http fail:", err.Error())
+		golog.Error("http err:", err.Error())
 	}
-
-
 }

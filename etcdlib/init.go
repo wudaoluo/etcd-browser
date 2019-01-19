@@ -7,12 +7,24 @@ import (
 
 var EtcdClient Clienter
 
-func SetEtcd(endpoint []string, Prefix string,tls *tls.Config) {
+func SetEtcd(ctx context.Context ,endpoint []string, Prefix string,tls *tls.Config) {
 	var err error
-	EtcdClient, err = New(endpoint, Prefix,tls)
+	EtcdClient, err = New(ctx, endpoint, Prefix,tls)
 	if err != nil {
 		panic(err)
 	}
+
+	//起一个goroutine 监听ctx.Done 事件
+	go func() {
+		select {
+		case <- ctx.Done():
+			EtcdClient.Close()
+		}
+	}()
+}
+
+func Watch(fn func(key,value []byte,revision int64) error) {
+	EtcdClient.Watch(fn)
 }
 
 func Get(key string) (*Node, error) {

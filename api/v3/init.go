@@ -1,15 +1,17 @@
 package v3
 
 import (
+	"context"
 	"crypto/tls"
 	e "github.com/wudaoluo/etcd-browser"
 	"github.com/wudaoluo/etcd-browser/etcdlib"
+	"github.com/wudaoluo/etcd-browser/model"
 	"go.etcd.io/etcd/pkg/transport"
 )
 
 const ETCD_V2 = "v2"
 
-func init() {
+func Init(ctx context.Context) {
 	cnf:= e.GetConfigInstance()
 	if  cnf.GetString("etcd_version") == ETCD_V2 {
 		return
@@ -32,6 +34,10 @@ func init() {
 		}
 
 	}
-	etcdlib.SetEtcd(cnf.GetStringSlice("etcd_addr"),
+	etcdlib.SetEtcd(ctx,cnf.GetStringSlice("etcd_addr"),
 		cnf.GetString("etcd_root_key"),tls)
+
+	if cnf.GetBool("etcd_watch") {
+		etcdlib.Watch(model.Put)
+	}
 }

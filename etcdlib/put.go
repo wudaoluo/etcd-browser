@@ -2,7 +2,6 @@ package etcdlib
 
 import (
 	"context"
-	"github.com/wudaoluo/etcd-browser/regret"
 	"go.etcd.io/etcd/clientv3"
 )
 
@@ -49,9 +48,6 @@ func (c *client) put(ctx context.Context, key, value string, mustEmpty bool) err
 		return ErrorPutKey
 	}
 
-	if txnResp.Succeeded {
-		regret.PutString(key,value)
-	}
 
 	return nil
 }

@@ -16,8 +16,11 @@ https://github.com/soyking/e3ch.git
     - 支持 etcdv3 tls 加密
     - 支持 json toml 配置文件 
 
-### version 0.2
-    - 即将支持后悔药功能
+### version 0.2 (后悔药功能)
+    - etcd v3记录每次操作key,value 和版本号
+    - 添加leveldb (10万数据测试查询速度很快)
+    - 修改前段支持在线恢复数据 [即将支持]
+    - etcd v2 [后悔药功能开发]
 
 ### version 0.3
     - 支持认证

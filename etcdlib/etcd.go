@@ -7,6 +7,7 @@ import (
 	"go.etcd.io/etcd/clientv3"
 	"go.etcd.io/etcd/mvcc/mvccpb"
 	"strings"
+	"sync/atomic"
 	"time"
 )
 
@@ -42,16 +43,33 @@ type Clienter interface {
 	DeleteContext(ctx context.Context, key string) error
 
 	MembersHandler() (interface{}, error)
+
+	Watch(fn func(key,value []byte,revision int64) error)
+
+	Close()
+}
+
+type watch struct {
+	revision int64
+}
+
+func (w *watch) Store(newRevision int64) {
+	atomic.StoreInt64(&w.revision,newRevision)
 }
 
 type client struct {
+	ctx context.Context
+	watch    *watch
 	keysAPI  *clientv3.Client
 	prefix   string //etcd root key
 	dirValue string
 	timeout  time.Duration
+
 }
 
-func New(endpoint []string, Prefix string,tls *tls.Config) (Clienter, error) {
+
+
+func New(ctx context.Context, endpoint []string, Prefix string,tls *tls.Config) (Clienter, error) {
 	var err error
 
 	cfg := clientv3.Config{
@@ -67,6 +85,8 @@ func New(endpoint []string, Prefix string,tls *tls.Config) (Clienter, error) {
 	}
 
 	ctl := &client{
+		ctx: ctx,
+		watch: &watch{revision:0},
 		keysAPI:  c,
 		prefix:   Prefix,
 		dirValue: DEFAULT_DIR_VALUE,
@@ -77,6 +97,7 @@ func New(endpoint []string, Prefix string,tls *tls.Config) (Clienter, error) {
 	if err != nil {
 		panic(err)
 	}
+
 	return ctl, nil
 }
 
