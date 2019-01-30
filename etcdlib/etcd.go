@@ -15,6 +15,7 @@ const (
 	DEFAULT_DIR_VALUE = "etcdv3_dir_$2H#%gRe3*t"
 )
 
+
 var (
 	ErrorInvalidRootKey = errors.New("root key should not be empty or end with /")
 	ErrorInvalidKey     = errors.New("key should start with /")
@@ -44,7 +45,7 @@ type Clienter interface {
 
 	MembersHandler() (interface{}, error)
 
-	Watch(fn func(key,value []byte,revision int64) error)
+	Watch(fn func(key, reallyKey,value []byte,revision int64,t string) error)
 
 	EnsureKey(key string) (string, string, error)
 

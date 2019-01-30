@@ -23,7 +23,7 @@ func SetEtcd(ctx context.Context ,endpoint []string, Prefix string,tls *tls.Conf
 	}()
 }
 
-func Watch(fn func(key,value []byte,revision int64) error) {
+func Watch(fn func(key, reallyKey,value []byte,revision int64,t string) error) {
 	EtcdClient.Watch(fn)
 }
 

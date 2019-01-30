@@ -22,7 +22,7 @@ func PostKeys(c *gin.Context) {
 		}
 
 		rootKey = path.Join(rootKey, keys[i])
-		if i == keysLen-1 && !isDir {
+		if i == (keysLen-1) && !isDir {
 			value := c.Query("value")
 			err = etcdlib.Create(rootKey, value)
 			if err != nil {

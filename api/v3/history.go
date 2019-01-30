@@ -15,7 +15,13 @@ func History(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
 	}
 
+	node, err := etcdlib.Get(key)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"err": err.Error()})
+		return
+	}
 
-	record := model.Get(etcdKey)
+
+	record := model.Get(etcdKey,node.IsDir)
 	c.JSON(http.StatusOK, gin.H{"action": "history", "node": record,"key":key})
 }
