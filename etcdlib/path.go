@@ -11,6 +11,9 @@ func isRoot(key string) bool {
 	return key == "/"
 }
 
+func (c *client) EnsureKey(key string) (string, string, error) {
+	return c.ensureKey(key)
+}
 
 // ensure key, return (realKey, parentKey)
 func (c *client) ensureKey(key string) (string, string, error) {

@@ -2,8 +2,9 @@
 var app = angular.module("app", ["xeditable","ngCookies"]);
 
 app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$cookies) {
-  var keyPrefix = '/v3/keys',
-      statsPrefix = '/v3/stats';
+  var version = '/v3',
+      keyPrefix = version+'/keys',
+      statsPrefix = version+'/stats';
 
   if($cookies.urlPrefix){
     $scope.urlPrefix = $cookies.urlPrefix;
@@ -92,6 +93,14 @@ app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$
 
   $scope.deleteNode = function(node){
     $http({method: 'DELETE', url: $scope.getPrefix() + keyPrefix + node.key}).
+    success(function(data) {
+      $scope.loadNode(node.parent);
+    }).
+    error(errorHandler);
+  }
+
+  $scope.historyRecord =  function(node){
+    $http({method: 'POST', url: $scope.getPrefix() + version + "/history" + node.key}).
     success(function(data) {
       $scope.loadNode(node.parent);
     }).

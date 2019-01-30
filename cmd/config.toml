@@ -3,6 +3,7 @@ debug = true
 etcd_root_key = "root"
 etcd_addr = ["127.0.0.1:12379"]
 etcd_version =  "v3"
+etcd_watch = true
 service_name = "etcd_browser"
 log_dir = "./log"
 log_type_json =  true

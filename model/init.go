@@ -4,10 +4,6 @@ import (
 	"context"
 	"github.com/ThreeKing2018/goutil/golog"
 	"github.com/syndtr/goleveldb/leveldb"
-
-	//_ "github.com/mattn/go-sqlite3"
-	//"github.com/ThreeKing2018/goutil/golog"
-	e "github.com/wudaoluo/etcd-browser"
 )
 
 var db *leveldb.DB
@@ -15,10 +11,10 @@ var db *leveldb.DB
 
 
 func DBInit(ctx context.Context) {
-	cnf:= e.GetConfigInstance()
-
+	//cnf:= e.GetConfigInstance()
+	//cnf.GetString("db.source_name")
 	var err error
-	db, err = leveldb.OpenFile( cnf.GetString("db.source_name"), nil)
+	db, err = leveldb.OpenFile(".etcd_browser" , nil)
 	if err != nil {
 		golog.Fatalw("leveldb 打开失败","err",err)
 		panic(err)

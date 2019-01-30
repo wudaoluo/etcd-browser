@@ -2,9 +2,11 @@ package etcdlib
 
 import (
 	"github.com/ThreeKing2018/goutil/golog"
+	"github.com/wudaoluo/etcd-browser/util"
 	"go.etcd.io/etcd/clientv3"
 	"time"
 )
+
 
 func (c *client) Watch(fn func(key,value []byte,revision int64) error) {
 	rch := c.keysAPI.Watch(c.ctx, c.prefix,clientv3.WithPrefix(),
@@ -28,7 +30,7 @@ func (c *client) Watch(fn func(key,value []byte,revision int64) error) {
 			}
 
 			for _, ev := range wresp.Events {
-				err := fn(ev.Kv.Key, ev.Kv.Value, ev.Kv.ModRevision)
+				err := fn(append(ev.Kv.Key, util.Int64ToBytes(ev.Kv.ModRevision)...), ev.Kv.Value, ev.Kv.ModRevision)
 				if err != nil {
 					golog.Errorw("faild",
 						"type", ev.Type,
@@ -40,11 +42,10 @@ func (c *client) Watch(fn func(key,value []byte,revision int64) error) {
 				}else {
 					golog.Debugw("success",
 						"type", ev.Type,
-						"key", ev.Kv.Key,
-						"value", ev.Kv.Value,
+						"key", string(ev.Kv.Key),
+						"value", string(ev.Kv.Value),
 						"createRevisoin", ev.Kv.CreateRevision,
-						"modrevision", ev.Kv.ModRevision,
-						"err", err)
+						"modrevision", ev.Kv.ModRevision)
 				}
 			}
 
@@ -71,3 +72,6 @@ func (c *client) Watch(fn func(key,value []byte,revision int64) error) {
 	golog.Warn("退出etcd v3 watch")
 
 }
+
+
+

@@ -78,3 +78,7 @@ func DeleteContext(ctx context.Context, key string) error {
 func MembersHandler() (interface{}, error) {
 	return EtcdClient.MembersHandler()
 }
+
+func EnsureKey(key string) (string, string, error) {
+	return EtcdClient.EnsureKey(key)
+}

@@ -5,13 +5,15 @@ import (
 	"github.com/kubernetes/kubernetes/staging/src/k8s.io/apimachinery/pkg/util/json"
 	"github.com/syndtr/goleveldb/leveldb/util"
 	"sort"
+	"time"
 )
 
+const shortForm = "2006-01-01 15:04:05"
 
 type Record struct {
-	Key string
-	Value string
-	Version int
+	Value string  `json:"value"`
+	Version int   `json:"version"`
+	Time string   `json:"time"`
 }
 
 type Records []*Record
@@ -34,7 +36,6 @@ func Get(key string) []*Record{
 			golog.Error("json解码失败,丢掉这条数据","err",err)
 			continue
 		}
-		r.Key = string(iter.Key())
 		rs = append(rs,r)
 	}
 
@@ -47,6 +48,7 @@ func Put(key,value []byte,version int64) error {
 	v ,err:= json.Marshal(&Record{
 		Value:string(value),
 		Version:int(version),
+		Time:time.Now().Format(shortForm),
 	})
 	if err != nil {
 		return err

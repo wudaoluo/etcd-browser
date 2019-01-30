@@ -11,7 +11,6 @@
 
 <script src="angular-xeditable/js/bootstrap.min.js"></script>
 
-
 <link href="angular-xeditable/css/xeditable.css" rel="stylesheet">
 <script src="angular-xeditable/js/xeditable.js"></script>
 <link rel="stylesheet" href="main.css">
@@ -31,12 +30,15 @@
         <button type="button" class="btn btn-default btn-xs" ng-click="deleteNode(node)" title="Delete Node">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
+          <button type="button" class="btn btn-default btn-xs" ng-click="historyRecord(node)" title="history record">
+              <span class="glyphicon glyphicon-list-alt"></span>
+          </button>
       </td>
       <td style="text-align:left;font-weight:bold;padding: 5px 4px;">
         <span>{{node.name}}:</span>
       </td>
       <td style="padding-right: 5px;">
-        <span class="value" editable-text="node.value" onbeforesave="updateNode(node,$data)">{{node.value || '(empty)'}}</span>
+        <span class="value" editable-text="node.value" onbeforesave="updateNode(node,$data)">{{node.value || "(empty)" }}</span>
       </td>
     </tr>
   </table>
@@ -54,6 +56,9 @@
     </button>
     <button ng-if="node.open" type="button" class="btn btn-default btn-xs" ng-click="deleteDir(node)" title="Delete Directory">
       <span class="glyphicon glyphicon-trash"></span>
+    </button>
+          <button ng-if="node.open" type="button" class="btn btn-default btn-xs" ng-click="historyRecord(node)" title="history record">
+      <span class="glyphicon glyphicon-list-alt"></span>
     </button>
   </div>
   <ul >

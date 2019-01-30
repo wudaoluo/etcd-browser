@@ -46,6 +46,8 @@ type Clienter interface {
 
 	Watch(fn func(key,value []byte,revision int64) error)
 
+	EnsureKey(key string) (string, string, error)
+
 	Close()
 }
 
