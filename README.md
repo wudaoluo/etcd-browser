@@ -19,7 +19,7 @@ https://github.com/soyking/e3ch.git
 ### version 0.2 (后悔药功能)
     - etcd v3记录每次操作key,value 和版本号
     - 添加leveldb (10万数据测试查询速度很快)
-    - 修改前段支持在线恢复数据 [即将支持]
+    - etcd v3 后悔药开发完成
     - etcd v2 [后悔药功能开发]
 
 ### version 0.3
