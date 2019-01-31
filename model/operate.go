@@ -29,7 +29,7 @@ func (p Records) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
 var cnf = e.GetConfigInstance()
 
 //etcd key ? isDir :{key == false, dir == true}
-func Get(key string, isDir bool) []*Record {
+func Get(key string) []*Record {
 	var rs []*Record
 	var err error
 
@@ -49,8 +49,9 @@ func Get(key string, isDir bool) []*Record {
 			continue
 		}
 
-		if isDir && r.Type != etcdlib.WATCH_EVENT_DELETE {
+		if r.Type == etcdlib.WATCH_EVENT_DELETE && r.Value == "" {
 			continue
+
 		}
 
 
