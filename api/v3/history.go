@@ -18,3 +18,16 @@ func History(c *gin.Context) {
 	record := model.Get(etcdKey)
 	c.JSON(http.StatusOK, gin.H{"action": "history", "node": record,"key":key})
 }
+
+
+func Restore(c *gin.Context) {
+	key := c.Param("action")
+	value := c.Query("value")
+	err := etcdlib.Create(key, value)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
+}

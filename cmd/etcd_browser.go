@@ -45,6 +45,7 @@ func main() {
 	v3.PUT("/keys/*action", apiv3.PutKeys)
 	v3.GET("/stats/self",apiv3.Leader)
 	v3.POST("/history/*action",apiv3.History)
+	v3.PUT("/restore/*action",apiv3.Restore)
 
 
 	cnf:= e.GetConfigInstance()

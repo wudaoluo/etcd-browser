@@ -1,38 +1,45 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
-<script src="angular-xeditable/js/angular.min.js"></script>
-<script src="angular-xeditable/js/angular-cookies.min.js"></script>
-<link rel="stylesheet" href="angular-xeditable/css/bootstrap.min.css">
-<link rel="stylesheet" href="angular-xeditable/css/bootstrap-theme.min.css">
-<link href="angular-xeditable/css/xeditable.css" rel="stylesheet">
-<script src="angular-xeditable/js/xeditable.js"></script>
-<link rel="stylesheet" href="main.css">
-<script src="etcdbrowser.js"></script>
+    <script src="angular-xeditable/js/jquery.min.js"></script>
+    <script src="angular-xeditable/js/angular.min.js"></script>
+    <script src="angular-xeditable/js/angular-cookies.min.js"></script>
+
+    <link rel="stylesheet" href="angular-xeditable/css/bootstrap.min.css">
+    <link rel="stylesheet" href="angular-xeditable/css/bootstrap-theme.min.css">
+
+
+    <script src="angular-xeditable/js/bootstrap.min.js"></script>
+
+
+    <link href="angular-xeditable/css/xeditable.css" rel="stylesheet">
+    <script src="angular-xeditable/js/xeditable.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <script src="etcdbrowser.js"></script>
 </head>
 <body>
 <script type="text/ng-template" id="prop-block">
-  <button type="button" class="btn btn-default btn-xs" ng-click="addNode(activeNode)" title="Add Property">
-    Add Property
-  </button>
-  <table class="property-table">
-    <tr ng-repeat="node in activeNode.nodes | orderBy:'name'" ng-if="!node.dir" ng-class-odd="'odd-row'">
-      <td>
-        <button type="button" class="btn btn-default btn-xs" ng-click="copyNode(node)" title="Copy Node">
-          <span class="glyphicon glyphicon-floppy-open"></span>
-        </button>
-        <button type="button" class="btn btn-default btn-xs" ng-click="deleteNode(node)" title="Delete Node">
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
-          <button type="button" class="btn btn-default btn-xs" ng-click="historyRecord(node)" title="history record">
-              <span class="glyphicon glyphicon-list-alt"></span>
-          </button>
-      </td>
-      <td style="text-align:left;font-weight:bold;padding: 5px 4px;">
-        <span>{{node.name}}:</span>
-      </td>
-      <td style="padding-right: 5px;">
-        <span class="value" editable-text="node.value" onbeforesave="updateNode(node,$data)">{{node.value || "(empty)" }}</span>
+    <button type="button" class="btn btn-default btn-xs" ng-click="addNode(activeNode)" title="Add Property">
+        Add Property
+    </button>
+    <table class="property-table">
+        <tr ng-repeat="node in activeNode.nodes | orderBy:'name'" ng-if="!node.dir" ng-class-odd="'odd-row'">
+            <td>
+                <button type="button" class="btn btn-default btn-xs" ng-click="copyNode(node)" title="Copy Node">
+                    <span class="glyphicon glyphicon-floppy-open"></span>
+                </button>
+                <button type="button" class="btn btn-default btn-xs" ng-click="deleteNode(node)" title="Delete Node">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal1" ng-click="historyRecord(node)" title="history record">
+                    <span class="glyphicon glyphicon-list-alt"></span>
+                </button>
+            </td>
+            <td style="text-align:left;font-weight:bold;padding: 5px 4px;">
+                <span>{{node.name}}:</span>
+            </td>
+            <td style="padding-right: 5px;">
+        <span class="value" editable-text="node.value" onbeforesave="updateNode(node,$data)">{{node.value || "(empty)"}}</span>
       </td>
     </tr>
   </table>
@@ -41,7 +48,7 @@
   <span ng-click="toggleNode(node)" class="glyphicon glyphicon-minus toggle-icon" ng-if="node.open"></span>
   <span ng-click="toggleNode(node)" class="glyphicon glyphicon-plus toggle-icon" ng-if="!node.open"></span>
   <a href="" ng-click="setActiveNode(node)" ng-if="node.dir" class="{{node.key == activeNode.key ? 'active-node' : ''}}">{{node.name}}</a>
-  <div class="btn-group" ng-if="node.key == activeNode.key">
+            <div class="btn-group" ng-if="node.key == activeNode.key">
     <button ng-if="node.open" ng-click="createDir(node)" class="btn btn-default btn-xs" type="button" title="Create Directory">
       <span class="glyphicon glyphicon-plus"></span>
     </button>
@@ -51,8 +58,8 @@
     <button ng-if="node.open" type="button" class="btn btn-default btn-xs" ng-click="deleteDir(node)" title="Delete Directory">
       <span class="glyphicon glyphicon-trash"></span>
     </button>
-          <button ng-if="node.open" type="button" class="btn btn-default btn-xs" ng-click="historyRecord(node)" title="history record">
-      <span class="glyphicon glyphicon-list-alt"></span>
+    <button ng-if="node.open" type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal0" ng-click="historyRecord(node)" title="history record">
+        <span class="glyphicon glyphicon-list-alt"></span>
     </button>
   </div>
   <ul >
@@ -60,65 +67,131 @@
   </ul>
 </script>
 
-  <div class="container-fluid" role="main" ng-controller="NodeCtrl">
+<div class="container-fluid" role="main" ng-controller="NodeCtrl">
     <h1 class="warning">etcd browser</h1>
     <div class="row">
-      <div class="col-md-12">
-		    <form ng-submit="submit()">
-		      <div class="input-group" ng-submit="submit()">
-		        <input type="text" class="form-control" ng-model="urlPrefix" placeholder="http://localhost:2379">
-		        <span class="input-group-btn">
+        <div class="col-md-12">
+            <form ng-submit="submit()">
+                <div class="input-group" ng-submit="submit()">
+                    <input type="text" class="form-control" ng-model="urlPrefix" placeholder="http://localhost:2379">
+                    <span class="input-group-btn">
 		          <button class="btn btn-default" type="submit">Go!</button>
 		        </span>
-		      </div>
-		    </form>
-	    </div>
+                </div>
+            </form>
+        </div>
     </div>
     <div ng-if="error" class="alert alert-danger alert-dismissible" role="alert">{{error}}</div>
     <div class="row top-buffer">
-      <div class="col-md-6">
-        <div class="tree prop-block" >
-          <ul>
-            <li>
-              <a href="#" ng-click="setActiveNode(root)" class="{{root.key == activeNode.key ? 'active-node' : ''}}">root</a>
-              <div class="btn-group">
-                <button ng-click="createDir(root)" class="btn btn-default btn-xs" type="button" title="Create Directory">
-                  <span class="glyphicon glyphicon-plus"></span>
-                </button>
-              </div>
-              <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" ng-click="loadStats()">Stats</button>
-              <ul>
-                <li ng-repeat="node in root.nodes | orderBy:'name'" ng-include="'tree-item'" ng-if="node.dir"></li>
-              </ul>
-            </li>
-          </ul>
+        <div class="col-md-6">
+            <div class="tree prop-block" >
+                <ul>
+                    <li>
+                        <a href="#" ng-click="setActiveNode(root)" class="{{root.key == activeNode.key ? 'active-node' : ''}}">root</a>
+                        <div class="btn-group">
+                            <button ng-click="createDir(root)" class="btn btn-default btn-xs" type="button" title="Create Directory">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </div>
+                        <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" ng-click="loadStats()">Stats</button>
+                        <ul>
+                            <li ng-repeat="node in root.nodes | orderBy:'name'" ng-include="'tree-item'" ng-if="node.dir"></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="prop-block" ng-include="'prop-block'" ng-if="activeNode"></div>
-      </div>
+        <div class="col-md-6">
+            <div class="prop-block" ng-include="'prop-block'" ng-if="activeNode"></div>
+        </div>
     </div>
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-		        <h4 class="modal-title" id="myModalLabel">Stats</h4>
-		      </div>
-		      <div class="modal-body">
-                  <div ng-if= stats.Prefix>
-                    <pre>{{stats.store}}</pre>
-                    <pre>{{stats.leader}}</pre>
-                  </div>
-		        <pre>{{stats.self}}</pre>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-	</div>
+
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel0">history</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{{historys.key}}</div>
+                    <table class="table table-striped table-bordered table-hover">
+                        <tr>
+                            <th>Value</th>
+                            <th>Type</th>
+                            <th>Version</th>
+                            <th>Date</th>
+                            <th>Operate</th>
+                        </tr>
+                        <tr ng-repeat="history in historys.node">
+                            <td>{{history.Value}}</td>
+                            <td>{{history.Type}}</td>
+                            <td>{{history.Version}}</td>
+                            <td>{{history.Time}}</td>
+                            <td><button class="btn btn-primary btn-xs" ng-click="restore(historys.key,history.Value)">restore</button></td>
+                        </tr>
+
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel0" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel0">history</h4>
+                </div>
+                <div class="modal-body">
+                   <table class="table table-striped table-bordered table-hover">
+                       <tr>
+                           <th>Key</th>
+                           <th>Value</th>
+                           <th>Type</th>
+                           <th>Version</th>
+                           <th>Date</th>
+                           <th>Operate</th>
+                       </tr>
+                       <tr ng-repeat="history in historys.node">
+                           <td>{{history.Key}}</td>
+                           <td>{{history.Value}}</td>
+                           <td>{{history.Type}}</td>
+                           <td>{{history.Version}}</td>
+                           <td>{{history.Time}}</td>
+                           <td><button class="btn btn-primary btn-xs" ng-click="restore(history.Key,history.Value)">restore</button></td>
+                       </tr>
+
+                   </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Stats</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div ng-if= stats.Prefix>
+                                    <pre>{{stats.store}}</pre>
+                                    <pre>{{stats.leader}}</pre>
+                                </div>
+                                <pre>{{stats.self}}</pre>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

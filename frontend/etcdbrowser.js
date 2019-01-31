@@ -91,6 +91,19 @@ app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$
     error(errorHandler);
   }
 
+  $scope.restore = function(key,value) {
+    $http({method: 'PUT',
+      url: $scope.getPrefix() + version + "/restore" + key,
+      params: {"value": value}}).
+    success(function(data) {
+      alert("restore success")
+      location.reload();
+    }).
+    error(function () {
+      alert("restore faild")
+    });
+  }
+
   $scope.deleteNode = function(node){
     $http({method: 'DELETE', url: $scope.getPrefix() + keyPrefix + node.key}).
     success(function(data) {
@@ -100,9 +113,10 @@ app.controller('NodeCtrl', ['$scope','$http','$cookies', function($scope,$http,$
   }
 
   $scope.historyRecord =  function(node){
+      $scope.historys = {};
     $http({method: 'POST', url: $scope.getPrefix() + version + "/history" + node.key}).
     success(function(data) {
-      $scope.loadNode(node.parent);
+        $scope.historys = data;
     }).
     error(errorHandler);
   }
