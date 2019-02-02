@@ -81,8 +81,6 @@ func (c *client) Watch(fn func(key, reallyKey, value []byte, revision int64,t st
 		}
 	}()
 
-	golog.Warn("退出etcd v3 watch")
-
 }
 
 func getParentKey(key, delim []byte) []byte {

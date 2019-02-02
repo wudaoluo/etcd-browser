@@ -49,6 +49,8 @@ type Clienter interface {
 
 	EnsureKey(key string) (string, string, error)
 
+	Backup(filepath string)
+
 	Close()
 }
 

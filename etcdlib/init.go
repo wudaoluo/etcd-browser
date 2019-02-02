@@ -82,3 +82,7 @@ func MembersHandler() (interface{}, error) {
 func EnsureKey(key string) (string, string, error) {
 	return EtcdClient.EnsureKey(key)
 }
+
+func Backup(fpath string) {
+	EtcdClient.Backup(fpath)
+}
