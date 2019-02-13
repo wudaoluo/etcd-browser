@@ -8,6 +8,8 @@ import (
 
 //配置文件操作
 
+
+
 type singleton config.Viperable
 
 
@@ -23,7 +25,7 @@ func GetConfigInstance() singleton {
 //配置文件初始化
 func load() {
 	v = config.New()
-	var cnfType = "json"
+	var cnfType = Default_Cnf_Type
 	a := strings.Split(Arg.configfile,".")
 	if len(a) == 2 {
 		cnfType = a[1]

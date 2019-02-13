@@ -2,10 +2,10 @@ package model
 
 import (
 	"github.com/ThreeKing2018/goutil/golog"
-	"github.com/kubernetes/kubernetes/staging/src/k8s.io/apimachinery/pkg/util/json"
 	"github.com/syndtr/goleveldb/leveldb/util"
 	e "github.com/wudaoluo/etcd-browser"
 	"github.com/wudaoluo/etcd-browser/etcdlib"
+	"encoding/json"
 	"sort"
 	"time"
 )

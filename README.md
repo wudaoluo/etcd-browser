@@ -21,9 +21,10 @@ https://github.com/soyking/e3ch.git
     - 添加leveldb (10万数据测试查询速度很快)
     - etcd v3 后悔药开发完成
     - etcd v3 备份功能开发完成
-    - etcd v2 [后悔药功能开发]
+    - etcd v2 [后悔药功能-待开发]
 
 ### version 0.3
+    - 使用vue重写界面
     - 支持认证
         - etcd  认证
         - 登录  认证
