@@ -12,5 +12,6 @@ service_name = "etcd_browser"
 log_dir = "./log"
 log_type_json =  true
 
+
 [db]
 source_name = "./.etcd_browser"
