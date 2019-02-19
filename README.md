@@ -22,6 +22,7 @@ https://github.com/soyking/e3ch.git
     - etcd v3 后悔药开发完成
     - etcd v3 备份功能开发完成
     - etcd v2 [后悔药功能-待开发]
+    - etcd v2 [备份功能-待开发]
 
 ### version 0.3
     - 使用vue重写界面

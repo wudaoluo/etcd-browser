@@ -23,7 +23,7 @@ func History(c *gin.Context) {
 func Restore(c *gin.Context) {
 	key := c.Param("action")
 	value := c.Query("value")
-	err := etcdlib.Create(key, value)
+	err := etcdlib.Put(key, value)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
 		return
