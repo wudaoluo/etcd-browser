@@ -1,18 +1,19 @@
 package v3
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/emicklei/go-restful"
 	"github.com/wudaoluo/etcd-browser/etcdlib"
 	"net/http"
+	"path"
 )
 
-func DelKeys(c *gin.Context) {
-	key := c.Param("action")
+func DelKeys(request *restful.Request, response *restful.Response)  {
+	key :=  path.Join("/",request.PathParameter("subpath"))
 	err := etcdlib.Delete(key)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+		response.WriteError(http.StatusInternalServerError,err)
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	response.WriteEntity(nil)
 }

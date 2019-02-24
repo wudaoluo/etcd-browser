@@ -1,7 +1,6 @@
 package serverRoom
 
 import (
-	"flag"
 	"fmt"
 	"github.com/ThreeKing2018/goutil/golog"
 	"github.com/ThreeKing2018/goutil/golog/conf"
@@ -12,7 +11,7 @@ import (
 
 
 func Init() {
-	flag.Parse()
+	//flag.Parse()
 
 	//打印版本并退出
 	if Arg.Getver() {

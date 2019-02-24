@@ -1,33 +1,41 @@
 package v3
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/emicklei/go-restful"
 	"github.com/wudaoluo/etcd-browser/etcdlib"
 	"github.com/wudaoluo/etcd-browser/model"
 	"net/http"
+	"path"
 )
 
 
-func History(c *gin.Context) {
-	key := c.Param("action")
+type respHistoryValue struct {
+	Action string `json:"action"`
+	Node []*model.Record `json:"node"`
+	Key string `json:"key"`
+
+}
+
+func History(request *restful.Request, response *restful.Response) {
+	key := path.Join("/",request.PathParameter("subpath"))
 	etcdKey, _, err := etcdlib.EnsureKey(key)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+		response.WriteError(http.StatusInternalServerError,err)
 	}
 
 	record := model.Get(etcdKey)
-	c.JSON(http.StatusOK, gin.H{"action": "history", "node": record,"key":key})
+	response.WriteEntity(respHistoryValue{Action:"history",Node:record,Key:key})
 }
 
 
-func Restore(c *gin.Context) {
-	key := c.Param("action")
-	value := c.Query("value")
+func Restore(request *restful.Request, response *restful.Response) {
+	key := path.Join("/",request.PathParameter("subpath"))
+	value := request.QueryParameter("value")
 	err := etcdlib.Put(key, value)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+		response.WriteError(http.StatusInternalServerError,err)
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	response.WriteEntity(nil)
 }

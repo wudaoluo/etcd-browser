@@ -1,16 +1,22 @@
 package v3
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/ThreeKing2018/goutil/golog"
+	"github.com/emicklei/go-restful"
 	"github.com/wudaoluo/etcd-browser/etcdlib"
 	"net/http"
 	"path"
 	"strings"
 )
 
-func PostKeys(c *gin.Context) {
-	key := c.Param("action")
-	_, isDir := c.GetQuery("dir")
+type respPostKeysValue struct {
+	Action string
+}
+
+func PostKeys(request *restful.Request, response *restful.Response) {
+	key := path.Join("/",request.PathParameter("subpath"))
+	isDir := stringToBool(request.QueryParameter("dir"))
+
 	keys := strings.Split(key, "/")
 	rootKey := "/"
 	keysLen := len(keys)
@@ -22,11 +28,12 @@ func PostKeys(c *gin.Context) {
 		}
 
 		rootKey = path.Join(rootKey, keys[i])
-		if i == (keysLen-1) && !isDir {
-			value := c.Query("value")
+		if i == (keysLen-1) && ! isDir {
+			value := request.QueryParameter("value")
 			err = etcdlib.Create(rootKey, value)
 			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error(), "key": rootKey})
+				golog.Errorf("etcdlib.Create(rootKey, value)","key",rootKey,"value",value,"err",err)
+				response.WriteError(http.StatusInternalServerError,err)
 				return
 			}
 			break
@@ -39,20 +46,31 @@ func PostKeys(c *gin.Context) {
 				continue
 			}
 			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error(), "key": rootKey})
+				golog.Errorf("etcdlib.CreateDir(rootKey)","rootKey",rootKey,"err",err)
+				response.WriteError(http.StatusInternalServerError,err)
 				return
 			}
 			continue
 		}
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error(), "key": rootKey})
+			golog.Errorf("etcdlib.Get(rootKey)","rootKey",rootKey,"err",err)
+			response.WriteError(http.StatusInternalServerError,err)
 			return
 		}
 
 	}
 
-	c.JSON(http.StatusOK, gin.H{"action": "set"})
+	response.WriteEntity(respPostKeysValue{Action:"set"})
+}
+
+
+func stringToBool(a string) bool {
+	if strings.ToLower(a)=="true" {
+		return true
+	}
+
+	return false
 }
 
 

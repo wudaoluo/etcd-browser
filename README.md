@@ -23,6 +23,9 @@ https://github.com/soyking/e3ch.git
     - etcd v3 备份功能开发完成
     - etcd v2 [后悔药功能-待开发]
     - etcd v2 [备份功能-待开发]
+    
+### version 0.2.1 (go-restful 替换 gin)
+    能使用但是很多功能没有开发完
 
 ### version 0.3
     - 使用vue重写界面

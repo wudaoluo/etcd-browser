@@ -1,9 +1,10 @@
 package v3
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/emicklei/go-restful"
 	"github.com/wudaoluo/etcd-browser/etcdlib"
 	"net/http"
+	"path"
 )
 
 type Node struct {
@@ -21,22 +22,25 @@ func parseNode(node *etcdlib.Node) *Node {
 	}
 }
 
+type respKeysValue struct {
+	Action string `json:"action"`
+	Node *Node `json:"node"`
+}
 
+func Keys(request *restful.Request, response *restful.Response)  {
 
-func Keys(c *gin.Context) {
-
-	key := c.Param("action")
+	key := path.Join("/",request.PathParameter("subpath"))
 
 	node, err := etcdlib.Get(key)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"err": err.Error()})
+		response.WriteError(http.StatusNotFound,err)
 		return
 	}
 	if node.IsDir {
 
 		nodes, err := etcdlib.List(key)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+			response.WriteError(http.StatusInternalServerError,err)
 			return
 		}
 
@@ -47,7 +51,7 @@ func Keys(c *gin.Context) {
 		for _, node := range nodes {
 			realNodes.Nodes = append(realNodes.Nodes, parseNode(node))
 		}
-		c.JSON(http.StatusOK, gin.H{"action": "get", "node": realNodes})
+		response.WriteEntity(respKeysValue{Action:"get",Node:realNodes})
 	} else {
 		/*
 			node, err := client.Get(key)
@@ -57,6 +61,6 @@ func Keys(c *gin.Context) {
 
 			return parseNode(node), nil
 		*/
-		c.JSON(http.StatusOK, gin.H{"action": "get", "node": parseNode(node)})
+		response.WriteEntity(respKeysValue{Action:"get",Node:parseNode(node)})
 	}
 }
