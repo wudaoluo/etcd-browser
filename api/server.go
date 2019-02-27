@@ -1,8 +1,11 @@
 package api
 
 import (
+	"fmt"
 	"github.com/ThreeKing2018/goutil/golog"
 	"github.com/emicklei/go-restful"
+	"github.com/emicklei/go-restful-openapi"
+	"github.com/go-openapi/spec"
 	"github.com/spf13/cobra"
 	"net/http"
 	"path"
@@ -18,7 +21,6 @@ type argStruct struct {
 }
 
 var Arg = new(argStruct)
-
 
 func NewServerCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
@@ -38,11 +40,23 @@ func NewServerCommand() *cobra.Command {
 	rootCmd.Flags().StringVar(
 		&Arg.configfile,"c","config.toml","config file (default is config.toml)")
 
-	rootCmd.Flags().BoolVar(
-		&Arg.version,"version",false,"print version")
+	rootCmd.AddCommand(getVersion())
 	return rootCmd
 }
 
+
+func getVersion() *cobra.Command {
+	version := &cobra.Command{
+		Use: "version",
+		Short:"打印版本号",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("etcd-browser v1.0")
+		},
+	}
+
+	return version
+
+}
 
 //Container > webservice > route
 //https://blog.csdn.net/Daniel_greenspan/article/details/78624725
@@ -56,6 +70,9 @@ func Run() {
 	static.Route(static.GET("/etcdbrowser.js").To(staticFile))
 	static.Route(static.GET("/favicon.ico").To(staticFile))
 	static.Route(static.GET("/angular-xeditable/{subpath:*}").To(staticFromPathParam))
+	static.Route(static.GET("/apidocs/").To(staticSwagger))
+	static.Route(static.GET("/apidocs/{subpath:*}").To(staticSwagger))
+
 
 	v3 := new(restful.WebService)
 	v3.Path("/v3")
@@ -68,8 +85,11 @@ func Run() {
 	restful.Add(v3)
 
 
-	v3.Route(v3.GET("/keys/").To(apiv3.Keys))
-	v3.Route(v3.GET("/keys/{subpath:*}").To(apiv3.Keys))
+	v3.Route(v3.GET("/keys/").
+		To(apiv3.Keys).
+		Doc("获取key的value"))
+	v3.Route(v3.GET("/keys/{subpath:*}").To(apiv3.Keys).
+		Doc("aaaa"))
 	v3.Route(v3.POST("/keys/{subpath:*}").To(apiv3.PostKeys))
 	v3.Route(v3.DELETE("/keys/{subpath:*}").To(apiv3.DelKeys))
 	v3.Route(v3.PUT("/keys/{subpath:*}").To(apiv3.PutKeys))
@@ -78,6 +98,11 @@ func Run() {
 	v3.Route(v3.PUT("restore/{subpath:*}").To(apiv3.Restore))
 
 
+	config := restfulspec.Config{
+		WebServices: restful.RegisteredWebServices(), // you control what services are visible
+		APIPath:     "/apidocs/apidocs.json",
+		PostBuildSwaggerObjectHandler: enrichSwaggerObject}
+	restful.DefaultContainer.Add(restfulspec.NewOpenAPIService(config))
 
 
 	golog.Info("start listening on localhost:8080")
@@ -111,4 +136,33 @@ func staticFromPathParam(req *restful.Request, resp *restful.Response) {
 		resp.ResponseWriter,
 		req.Request,
 		actual)
+}
+
+func staticSwagger(req *restful.Request, resp *restful.Response) {
+	actual := path.Join(rootdir, "dist",req.PathParameter("subpath"))
+	http.ServeFile(
+		resp.ResponseWriter,
+		req.Request,
+		actual)
+}
+
+func enrichSwaggerObject(swo *spec.Swagger) {
+	swo.Info = &spec.Info{
+		InfoProps: spec.InfoProps{
+			Title:       "Etcd-Browser",
+			Description: "etcd v3 webIU api接口",
+			Contact: &spec.ContactInfo{
+				Name:  "carlo",
+				URL:   "https://github.com/wudaoluo/etcd-browser",
+			},
+			License: &spec.License{
+				Name: "MIT",
+				URL:  "http://mit.org",
+			},
+			Version: "0.2.1",
+		},
+	}
+	//swo.Tags = []spec.Tag{spec.Tag{TagProps: spec.TagProps{
+	//	Name:        "users",
+	//	Description: "Managing users"}}}
 }
