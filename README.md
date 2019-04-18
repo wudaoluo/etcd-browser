@@ -40,5 +40,8 @@ https://github.com/soyking/e3ch.git
 ### 生产tls证书
 > https://www.cnblogs.com/Tempted/p/7737361.html
 
+### fix  
+    使用命令行或者程序注册添加key时，如果不创建目录且目录默认值不一致将显示不出来
+    
 ## Screen Shot
 ![etcd-browser Screen Shot](http://henszey.github.io/etcd-browser/images/etcdbrowser.png)
