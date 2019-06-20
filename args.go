@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	VERSION = "0.2"
+	VERSION = "0.2.1"
 	DEFAULT_CONFIG_NAME = "config.toml"
     Default_Cnf_Type = "toml"
 )
